@@ -1,6 +1,7 @@
 import express from "express";
 import authRoutes from "./routes/auth";
 import apiRoutes from "./routes/api";
+import taskRoutes from "./routes/task";
 import { verifyToken, requireRole } from "./middleware/auth";
 import { AuthRequest } from "./types/auth";
 import { routeRegistry } from "./utils/routeRegistry";
@@ -32,6 +33,9 @@ routeRegistry.register("GET", "/", "Health check endpoint");
 // API documentation routes
 app.use("/", apiRoutes);
 routeRegistry.register("GET", "/apis", "List all available API endpoints");
+
+app.use("/api", taskRoutes);
+routeRegistry.register("GET", "/api/task", "Task endpoint");
 
 // Auth routes (routes registered in auth.ts module)
 app.use("/api/auth", authRoutes);

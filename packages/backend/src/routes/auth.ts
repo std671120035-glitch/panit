@@ -200,4 +200,26 @@ router.put('/update-profile', verifyToken, async (req: AuthRequest, res: Respons
   }
 })
 
+router.delete('/delete', verifyToken, async (req: AuthRequest, res: Response) => {
+  try {
+    // Get current user
+    const user = await prisma.user.findUnique({
+      where: { id: req.userId }
+    })
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' })
+    }
+
+    await prisma.user.delete({
+      where: { id: req.userId }
+    })
+
+    res.status(200).json({ message: 'User deleted successfully', userId: req.userId })
+  } catch (error) {
+    console.error('Delete user error:', error)
+    res.status(500).json({ error: 'Internal server error' })
+  }
+})
+
 export default router
