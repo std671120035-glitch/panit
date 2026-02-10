@@ -34,7 +34,7 @@ routeRegistry.register("GET", "/", "Health check endpoint");
 app.use("/", apiRoutes);
 routeRegistry.register("GET", "/apis", "List all available API endpoints");
 
-app.use("/api", taskRoutes);
+app.use("/api", verifyToken, taskRoutes);
 routeRegistry.register("GET", "/api/task", "Task endpoint");
 
 // Auth routes (routes registered in auth.ts module)
