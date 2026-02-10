@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+  <div class="min-h-screen bg-linear-to-br from-slate-50 via-blue-50 to-indigo-100">
     <!-- Navigation -->
     <Navbar />
 
@@ -75,14 +75,14 @@
               'from-blue-500 to-blue-600': auth.user.value?.role === 'USER',
               'from-purple-500 to-purple-600': auth.user.value?.role === 'MODERATOR'
             }"
-            class="bg-gradient-to-br rounded-2xl p-6 text-white shadow-lg"
+            class="bg-linear-to-br rounded-2xl p-6 text-white shadow-lg"
           >
             <p class="text-sm font-medium opacity-90 mb-2">Your Role</p>
             <p class="text-3xl font-bold">{{ auth.user.value?.role }}</p>
           </div>
 
           <!-- Status -->
-          <div class="bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl p-6 text-white shadow-lg">
+          <div class="bg-linear-to-br from-green-500 to-emerald-600 rounded-2xl p-6 text-white shadow-lg">
             <p class="text-sm font-medium opacity-90 mb-2">Status</p>
             <div class="flex items-center gap-2">
               <div class="w-3 h-3 bg-white rounded-full animate-pulse"></div>
@@ -94,7 +94,7 @@
 
       <!-- Admin Section -->
       <div v-if="auth.isAdmin.value" class="mt-8">
-        <div class="bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-300 rounded-2xl p-8 shadow-lg">
+        <div class="bg-linear-to-br from-amber-50 to-orange-50 border border-amber-300 rounded-2xl p-8 shadow-lg">
           <div class="flex items-center justify-between">
             <div>
               <h2 class="text-2xl font-bold text-amber-900 mb-2">Admin Access</h2>
@@ -112,6 +112,12 @@
 
       <!-- Navigation Buttons -->
       <div class="mt-8 flex gap-4">
+        <NuxtLink
+          to="/edit-profile"
+          class="flex-1 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl transition shadow-md hover:shadow-lg text-center"
+        >
+          Edit Profile
+        </NuxtLink>
         <NuxtLink
           to="/"
           class="flex-1 px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl transition shadow-md hover:shadow-lg text-center"

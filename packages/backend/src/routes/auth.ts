@@ -12,6 +12,7 @@ const prisma = new PrismaClient()
 routeRegistry.register('POST', '/api/auth/register', 'User registration (email, password, name)')
 routeRegistry.register('POST', '/api/auth/login', 'User login (email, password)')
 routeRegistry.register('GET', '/api/auth/me', 'Get current user information [Auth required]')
+routeRegistry.register('PUT', '/api/auth/update-profile', 'Update user profile (name, password) [Auth required]')
 
 // Register route
 router.post('/register', async (req: AuthRequest, res: Response) => {
@@ -138,6 +139,63 @@ router.get('/me', verifyToken, async (req: AuthRequest, res: Response) => {
     })
   } catch (error) {
     console.error('Get user error:', error)
+    res.status(500).json({ error: 'Internal server error' })
+  }
+})
+
+// Update profile
+router.put('/update-profile', verifyToken, async (req: AuthRequest, res: Response) => {
+  try {
+    const { name, currentPassword, newPassword } = req.body
+
+    // Get current user
+    const user = await prisma.user.findUnique({
+      where: { id: req.userId }
+    })
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' })
+    }
+
+    // Verify current password
+    const passwordMatch = await bcrypt.compare(currentPassword, user.password)
+    if (!passwordMatch) {
+      return res.status(401).json({ error: 'Current password is incorrect' })
+    }
+
+    // Prepare update data
+    const updateData: any = {}
+
+    // Update name if provided
+    if (name && name.trim()) {
+      updateData.name = name.trim()
+    }
+
+    // Update password if provided
+    if (newPassword) {
+      if (newPassword.length < 8) {
+        return res.status(400).json({ error: 'New password must be at least 8 characters' })
+      }
+      updateData.password = await bcrypt.hash(newPassword, 10)
+    }
+
+    // Update user
+    const updatedUser = await prisma.user.update({
+      where: { id: req.userId },
+      data: updateData
+    })
+
+    res.status(200).json({
+      message: 'Profile updated successfully',
+      user: {
+        id: updatedUser.id,
+        email: updatedUser.email,
+        name: updatedUser.name,
+        role: updatedUser.role
+      }
+    })
+  } catch (error) {
+    console.error('Update profile error:', error)
     res.status(500).json({ error: 'Internal server error' })
   }
 })
