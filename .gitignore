@@ -1,0 +1,29 @@
+# Dependencies
+node_modules/
+pnpm-lock.yaml
+yarn.lock
+package-lock.json
+
+# Production
+dist/
+build/
+.nuxt/
+.output/
+
+# Development
+.env
+.env.local
+.env.*.local
+.vscode/
+.DS_Store
+*.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Misc
+.cache/
+*.tsbuildinfo
